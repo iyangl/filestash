@@ -38,7 +38,7 @@
         <span id="modal-close" class="pointer button__round">+</span>
     </h1>
     <form method="post">
-        <input type="email" name="email" value="{{ .CurrentUser.Email }}" placeholder="Email" {{ if ne .CurrentUser.Email "" }}disabled{{ end }} />
+        <input type="text" name="email" value="{{ .CurrentUser.Email }}" placeholder="Username" {{ if ne .CurrentUser.Email "" }}disabled{{ end }} />
         <input type="password" name="password" value="{{ .CurrentUser.Password }}" placeholder="Password" />
         <input type="text" name="role" value="{{ .CurrentUser.Role }}" placeholder="Role" />
         <label>
@@ -65,7 +65,7 @@
     <table>
         <thead>
             <tr>
-                <th>Email</th>
+                <th>Username</th>
                 <th>Role</th>
                 <th style="width:10px;"></th>
                 <th style="width:10px;"></th>

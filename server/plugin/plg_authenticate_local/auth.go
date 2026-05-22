@@ -150,7 +150,7 @@ func (this SimpleAuth) EntryPoint(idpParams map[string]string, req *http.Request
 	res.Write([]byte(Page(`
         <form method="post" class="component_middleware">
             <label>
-                <input type="text" name="user" value="" placeholder="Email" />
+                <input type="text" name="user" value="" placeholder="Username" />
             </label>
             <label>
                 <input type="password" name="password" value="" placeholder="Password" />

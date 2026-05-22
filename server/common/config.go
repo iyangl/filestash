@@ -78,6 +78,7 @@ func NewConfiguration() Configuration {
 					FormElement{Name: "upload_button", Type: "boolean", Default: false, Description: "Display the upload button on any device"},
 					FormElement{Name: "upload_pool_size", Type: "number", Default: 15, Description: "Maximum number of files upload in parallel. Default: 15"},
 					FormElement{Name: "upload_chunk_size", Type: "number", Default: 0, Description: "Size of Chunks for Uploads in MB."},
+					FormElement{Name: "download_url_override", Type: "text", Default: "", Description: "Optional public download URL template. Supports a base URL or {{path}}, for example: https://example.com/{{path}}"},
 					FormElement{Name: "buffer_size", Type: "select", Default: "medium", Opts: []string{"small", "medium", "large"}, Description: "I/O buffer size for transfers. Larger buffers boost throughput on 20 GbE+ networks but use more memory."},
 					FormElement{Name: "filepage_default_view", Type: "select", Default: "grid", Opts: []string{"list", "grid"}, Description: "Default layout for files and folder on the file page"},
 					FormElement{Name: "filepage_default_sort", Type: "select", Default: "type", Opts: []string{"type", "date", "name"}, Description: "Default order for files and folder on the file page"},
@@ -297,6 +298,7 @@ func (this *Configuration) Export() interface{} {
 		MimeTypes               map[string]string `json:"mime"`
 		UploadPoolSize          int               `json:"upload_pool_size"`
 		UploadChunkSize         int               `json:"upload_chunk_size"`
+		DownloadUrlOverride     string            `json:"download_url_override"`
 		RefreshAfterUpload      bool              `json:"refresh_after_upload"`
 		FilePageDefaultSort     string            `json:"default_sort"`
 		FilePageDefaultView     string            `json:"default_view"`
@@ -322,6 +324,7 @@ func (this *Configuration) Export() interface{} {
 		MimeTypes:               AllMimeTypes(),
 		UploadPoolSize:          this.Get("general.upload_pool_size").Int(),
 		UploadChunkSize:         this.Get("general.upload_chunk_size").Int(),
+		DownloadUrlOverride:     this.Get("general.download_url_override").String(),
 		RefreshAfterUpload:      this.Get("general.refresh_after_upload").Bool(),
 		FilePageDefaultSort:     this.Get("general.filepage_default_sort").String(),
 		FilePageDefaultView:     this.Get("general.filepage_default_view").String(),

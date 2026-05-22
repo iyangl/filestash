@@ -5,6 +5,7 @@ import { basename, join, forwardURLParams } from "../../lib/path.js";
 import assert from "../../lib/assert.js";
 import { qs, qsa, safe } from "../../lib/dom.js";
 import { get as getConfig } from "../../model/config.js";
+import { overrideDownloadUrl } from "../../helpers/download_url.js";
 import { loadCSS } from "../../helpers/loader.js";
 import t from "../../locales/index.js";
 
@@ -127,7 +128,9 @@ function componentLeft(render, { $scroll, getSelectionLength$ }) {
         rxjs.switchMap(($page) => rxjs.merge(
             onClick(qs($page, `[data-action="download"]`), { preventDefault: true }).pipe(rxjs.tap(($button) => {
                 let url = $button.parentElement.getAttribute("href");
-                url += "&name=" + $button.parentElement.getAttribute("download");
+                if (url.startsWith("api/files/cat?")) {
+                    url += "&name=" + $button.parentElement.getAttribute("download");
+                }
                 window.open(url);
             })),
             onClick(qs($page, `[data-action="share"]`)).pipe(rxjs.tap(() => {
@@ -425,12 +428,14 @@ function generateLinkAttributes(selections) {
             filename = basename(path.replace(regDir, "")) + ".zip";
         } else {
             filename = basename(path);
-            href = "api/files/cat?";
+            href = overrideDownloadUrl(path) || "api/files/cat?";
         }
     }
-    href += selections.map(({ path }) => "path=" + encodeURIComponent(path)).join("&");
-    href = forwardURLParams(href, ["share"]);
-    return `href="${href}" download="${safe(filename)}"`;
+    if (href === "api/files/cat?" || href === "api/files/zip?") {
+        href += selections.map(({ path }) => "path=" + encodeURIComponent(path)).join("&");
+        href = forwardURLParams(href, ["share"]);
+    }
+    return `href="${safe(href)}" download="${safe(filename)}"`;
 }
 
 function toggleDependingOnPermission(path, action) {
